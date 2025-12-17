@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTEMENTE - Estimulación cognitiva a través del arte</title>
+    <meta name="description" content="ARTEMENTE: programa para adultos mayores que estimula memoria, atención y lenguaje a través del arte, el diálogo y ejercicios cognitivos guiados. Presencial en CABA y online para todo el país.">
+    <meta property="og:title" content="ARTEMENTE - Estimulación cognitiva a través del arte">
+    <meta property="og:description" content="ARTEMENTE: programa para adultos mayores que estimula memoria, atención y lenguaje a través del arte. Presencial en CABA y online para todo el país.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://artemente.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Framer Motion (opcional; queda listo para animaciones) -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0a2463;
+            --secondary: #3e92cc;
+            --accent: #20a39e;
+            --highlight: #f18f01;
+            --light: #ffffff;
+            --gray: #f5f5f5;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        /* ✅ FIX: Estas clases no existen por defecto en Tailwind.
+           Las definimos para que tu diseño se vea como esperás. */
+        .text-primary { color: var(--primary); }
+        .bg-primary { background-color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        .hover\:text-accent:hover { color: var(--accent); }
+        .border-primary { border-color: var(--primary); }
+
+        /* Header sticky */
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-padding { padding: 80px 0; }
+        
+        .card {
+            background-color: var(--light);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover { background-color: #061538; }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+        
+        .timeline-item { position: relative; padding-left: 40px; }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 28px;
+            width: 2px;
+            height: calc(100% + 20px);
+            background-color: var(--accent);
+        }
+        
+        .timeline-item:last-child::after { display: none; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(10, 36, 99, 0.9), rgba(62, 146, 204, 0.8)),
+                        url('https://sfile.chatglm.cn/images-ppt/2454091d8f8e.png');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        .chip {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .quote-card {
+            background-color: var(--gray);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile menu */
+        #mobile-menu {
+            display: none;
+        }
+        #mobile-menu.open {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Sticky -->
+    <header id="sticky-header" class="bg-white py-4 transition-all duration-300">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-primary">ARTEMENTE</div>
+            </div>
+
+            <nav class="hidden md:flex space-x-8">
+                <a href="#que-es" class="text-primary hover:text-accent transition-colors">Qué es</a>
+                <a href="#beneficios" class="text-primary hover:text-accent transition-colors">Qué se fortalece</a>
+                <a href="#modalidades" class="text-primary hover:text-accent transition-colors">Modalidades</a>
+                <a href="#referencias" class="text-primary hover:text-accent transition-colors">Referencias</a>
+                <a href="#micaela" class="text-primary hover:text-accent transition-colors">Micaela</a>
+                <a href="#contacto" class="text-primary hover:text-accent transition-colors">Contacto</a>
+            </nav>
+
+            <!-- ✅ CTA actualizado -->
+            <a href="#contacto" class="btn-primary hidden md:block">Consultar cupos</a>
+
+            <button id="menu-btn" class="md:hidden text-primary" aria-label="Abrir menú">
+                <i class="material-icons">menu</i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden border-t border-gray-200">
+            <div class="container mx-auto px-4 py-4 flex flex-col gap-3">
+                <a href="#que-es" class="text-primary hover:text-accent transition-colors">Qué es</a>
+                <a href="#beneficios" class="text-primary hover:text-accent transition-colors">Qué se fortalece</a>
+                <a href="#modalidades" class="text-primary hover:text-accent transition-colors">Modalidades</a>
+                <a href="#referencias" class="text-primary hover:text-accent transition-colors">Referencias</a>
+                <a href="#micaela" class="text-primary hover:text-accent transition-colors">Micaela</a>
+                <a href="#contacto" class="text-primary hover:text-accent transition-colors">Contacto</a>
+                <a href="#contacto" class="btn-primary text-center mt-2">Consultar cupos</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white section-padding">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl md:text-6xl font-bold mb-4">ARTEMENTE</h1>
+                <h2 class="text-2xl md:text-3xl font-medium mb-6">Estimulación cognitiva a través del arte</h2>
+
+                <!-- ✅ Copy actualizado -->
+                <p class="text-lg mb-6 max-w-2xl">
+                    Un programa para adultos mayores que estimula la memoria, la atención y el lenguaje a través de la experiencia artística,
+                    el diálogo y ejercicios cognitivos guiados. <span class="font-semibold">Modalidad presencial en CABA y online para todo el país.</span>
+                </p>
+
+                <!-- ✅ Línea de apoyo -->
+                <p class="text-sm opacity-90 mb-8 max-w-2xl">
+                    Ideal para quienes desean mantenerse activos, aprender y compartir en un espacio cuidado y estimulante.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                    <!-- ✅ CTA actualizado -->
+                    <a href="#contacto" class="btn-primary bg-white text-primary text-center">Consultar cupos</a>
+                    <a href="#modalidades" class="btn-secondary bg-transparent border-white text-white text-center">Ver modalidades</a>
+                </div>
+
+                <div class="flex flex-wrap">
+                    <span class="chip">Desde 2016</span>
+                    <span class="chip">Neurociencia + Neuroestética</span>
+                    <span class="chip">Presencial en AMA + Online</span>
+                    <!-- ✅ Chip agregado -->
+                    <span class="chip">Sin conocimientos previos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Qué es ARTEMENTE -->
+    <section id="que-es" class="section-padding">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Qué es ARTEMENTE</h2>
+
+                <!-- ✅ Copy actualizado -->
+                <p class="text-lg mb-6">
+                    ARTEMENTE es un programa de estimulación cognitiva para adultos mayores basado en la apreciación del arte.
+                    A través de obras visuales, conversación guiada y ejercicios específicos, se fortalecen funciones como la memoria,
+                    la atención, el lenguaje, la creatividad y la motivación, promoviendo la participación activa y el aprendizaje significativo.
+                </p>
+
+                <!-- ✅ Línea de autoridad -->
+                <p class="text-base text-gray-600">
+                    El programa se apoya en aportes de la neurociencia, la neuroestética y la psicología del envejecimiento.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="flex items-start">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">brush</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Apreciación guiada de obras y artistas</h3>
+                        <p>Observamos, analizamos y conectamos obras con experiencias e ideas para estimular la percepción y la reflexión.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">forum</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Conversación y expresión oral y escrita</h3>
+                        <p>El intercambio grupal fortalece el lenguaje, la comunicación y la construcción de sentido en comunidad.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">psychology</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Ejercicios cognitivos orientados a funciones específicas</h3>
+                        <p>Actividades diseñadas para trabajar memoria, atención y lenguaje, siempre vinculadas al contenido artístico del día.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">diversity_3</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Enfoque cultural, inclusivo y comunitario</h3>
+                        <p>Un espacio cuidado que valora la diversidad, la participación activa y el disfrute cultural.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <img src="https://sfile.chatglm.cn/images-ppt/f48c186697cd.jpg" alt="Adultos mayores participando en una clase de arte" class="rounded-lg shadow-lg mx-auto max-w-3xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Qué se fortalece -->
+    <section id="beneficios" class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <!-- ✅ Título actualizado -->
+                <h2 class="text-4xl font-bold mb-6">Qué se fortalece</h2>
+                <p class="text-lg">Cada encuentro integra reflexión, conversación y ejercicios aplicados.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">memory</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Memoria</h3>
+                    <p>Refuerzo y evocación a partir de obras, relatos y ejercicios guiados.</p>
+                </div>
+                
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">visibility</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Atención</h3>
+                    <p>Observación sostenida, foco en detalles y comparaciones para entrenar el análisis.</p>
+                </div>
+                
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">translate</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Lenguaje</h3>
+                    <p>Expresión oral y escrita: describir, argumentar, narrar y ampliar vocabulario.</p>
+                </div>
+                
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">lightbulb</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Creatividad</h3>
+                    <p>Interpretación, flexibilidad y nuevas conexiones a partir de la experiencia artística.</p>
+                </div>
+                
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">emoji_emotions</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Motivación</h3>
+                    <p>Curiosidad, disfrute cultural y sentido de continuidad en el aprendizaje.</p>
+                </div>
+                
+                <div class="card p-6 text-center">
+                    <div class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="material-icons text-2xl">groups</i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Habilidades sociales</h3>
+                    <p>Intercambio grupal, escucha activa y conversación significativa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modalidades -->
+    <section id="modalidades" class="section-padding">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Modalidades</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="card p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <i class="material-icons">location_on</i>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Presencial (CABA)</h3>
+                    </div>
+                    <p class="text-lg mb-4">AMA – Asociación Médica Argentina</p>
+                    <p class="mb-2"><i class="material-icons text-accent mr-2">event</i> Jueves 16 a 18 hs</p>
+                    <p class="mb-6"><i class="material-icons text-accent mr-2">place</i> Av. Santa Fe 1171, 1º piso</p>
+                    <img src="https://sfile.chatglm.cn/images-ppt/3f830646c8a0.jpg" alt="Clase presencial" class="rounded-lg mb-6">
+                    <a href="#contacto" class="btn-primary w-full text-center">Consultar cupos</a>
+                </div>
+                
+                <div class="card p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <i class="material-icons">laptop</i>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Online (todo el país)</h3>
+                    </div>
+                    <p class="mb-2"><i class="material-icons text-accent mr-2">event</i> Miércoles 18 a 20 hs</p>
+                    <p class="mb-6"><i class="material-icons text-accent mr-2">video_call</i> Google Meet</p>
+                    <img src="https://sfile.chatglm.cn/images-ppt/8d5748fa2842.jpg" alt="Clase online" class="rounded-lg mb-6">
+                    <a href="#contacto" class="btn-primary w-full text-center">Consultar cupos</a>
+                </div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto mt-12 text-center bg-accent bg-opacity-10 p-6 rounded-lg">
+                <p class="text-lg">
+                    <i class="material-icons text-accent mr-2">info</i>
+                    La modalidad online permite participar desde cualquier punto del país.
+                    <span class="block mt-2 text-base text-gray-700">
+                        No se requieren conocimientos de arte ni experiencia tecnológica.
+                    </span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cómo es una clase -->
+    <section class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Cómo es una clase</h2>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="timeline-item mb-10">
+                    <h3 class="text-xl font-semibold mb-2">1. Presentación guiada de una obra o artista</h3>
+                    <p>Comenzamos con la exploración de una obra o artista, observando contexto, técnicas e ideas principales.</p>
+                </div>
+                
+                <div class="timeline-item mb-10">
+                    <h3 class="text-xl font-semibold mb-2">2. Conversación y reflexión compartida</h3>
+                    <p>Facilitamos un diálogo grupal para expresar impresiones, recuerdos y asociaciones personales.</p>
+                </div>
+                
+                <div class="timeline-item mb-10">
+                    <h3 class="text-xl font-semibold mb-2">3. Ejercicios cognitivos aplicados</h3>
+                    <p>Actividades diseñadas para estimular funciones cognitivas, siempre vinculadas al contenido artístico del día.</p>
+                </div>
+                
+                <div class="timeline-item mb-10">
+                    <h3 class="text-xl font-semibold mb-2">4. Cierre integrador</h3>
+                    <p>Cerramos con síntesis, conexiones y una propuesta breve para continuar.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <img src="https://sfile.chatglm.cn/images-ppt/674cbde8e106.jpg" alt="Participantes en una clase de ARTEMENTE" class="rounded-lg shadow-lg mx-auto max-w-3xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Referencias -->
+    <section id="referencias" class="section-padding">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Referencias</h2>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="quote-card">
+                    <p class="text-lg italic mb-2">"La creatividad es la habilidad de encontrar soluciones nuevas y relevantes a los problemas, y el arte es un campo fértil para su desarrollo."</p>
+                    <p class="font-semibold">Howard Gardner – creatividad y comprensión cultural</p>
+                </div>
+                
+                <div class="quote-card">
+                    <p class="text-lg italic mb-2">"Son los espectadores quienes hacen los cuadros. El espectador completa la obra."</p>
+                    <p class="font-semibold">Marcel Duchamp – rol activo del espectador</p>
+                </div>
+                
+                <div class="quote-card">
+                    <p class="text-lg italic mb-2">"Observar más tiempo permite pensar mejor. La mirada atenta y prolongada sobre una obra de arte desarrolla la capacidad de análisis y reflexión."</p>
+                    <p class="font-semibold">David Perkins – observar más tiempo para pensar mejor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trayectoria -->
+    <section class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Trayectoria</h2>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="flex items-start mb-6">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">history</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Programa desarrollado desde 2016</h3>
+                        <p>Trayectoria sostenida y evolución del método en contextos reales de aprendizaje y participación.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start mb-6">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">local_hospital</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Experiencia en ámbitos de salud y cultura</h3>
+                        <p>Articulación entre cultura, bienestar y envejecimiento activo en espacios institucionales y comunitarios.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                        <i class="material-icons">diversity_1</i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Inclusión cultural y participación institucional</h3>
+                        <p>Compromiso con la accesibilidad cultural y la creación de espacios de participación significativa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Micaela -->
+    <section id="micaela" class="section-padding">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-4xl font-bold mb-12 text-center">Sobre Micaela</h2>
+                
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/3">
+                        <img src="https://sfile.chatglm.cn/images-ppt/08e84024eefa.jpg" alt="Micaela Patania" class="rounded-lg shadow-lg w-full">
+                    </div>
+                    
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-semibold mb-4">Micaela Patania</h3>
+
+                        <!-- ✅ Intro más humano -->
+                        <p class="mb-4">
+                            ARTEMENTE fue creado y es dirigido por Micaela Patania, artista y educadora especializada en arte, cultura y neurociencia aplicada a la adultez mayor.
+                        </p>
+
+                        <p class="mb-4">
+                            Directora y creadora de ARTEMENTE. Profesora Nacional de Arte (Escuela Prilidiano Pueyrredón), Magíster en Comunicaciones Institucionales (UCES) y Magíster en Museum Studies (NYU). Becaria Fulbright (Fondo Nacional de las Artes).
+                        </p>
+
+                        <p class="mb-6">
+                            Formación en neurociencias y educación para adultos mayores. Amplia experiencia en educación y curaduría en museos y organizaciones culturales.
+                        </p>
+                        <a href="#contacto" class="btn-primary">Contactar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="section-padding bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6">Sumate a ARTEMENTE</h2>
+                <p class="text-lg">Dejá tus datos y te contactamos con información sobre próximos cupos, modalidades y pasos de inscripción.</p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <form id="contact-form" class="card p-8">
+                    <input type="text" placeholder="Nombre" class="form-input" required>
+                    <input type="email" placeholder="Email" class="form-input" required>
+                    <input type="tel" placeholder="WhatsApp" class="form-input" required>
+                    
+                    <div class="mb-6">
+                        <label class="block mb-2 font-medium">Modalidad de interés</label>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="modalidad" value="online" class="mr-2">
+                                <span>Online</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="modalidad" value="presencial" class="mr-2">
+                                <span>Presencial</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="modalidad" value="ambas" class="mr-2" checked>
+                                <span>Ambas</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary w-full">Enviar consulta</button>
+                </form>
+                
+                <div class="mt-8 text-center">
+                    <p class="mb-4">O contactanos directamente por WhatsApp:</p>
+                    <a href="https://wa.me/5491123456789" target="_blank" class="inline-flex items-center btn-secondary">
+                        <i class="material-icons mr-2">whatsapp</i>
+                        +54 9 11 2345-6789
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-bold mb-2">ARTEMENTE</div>
+                    <p class="text-sm opacity-75">© 2025 Todos los derechos reservados</p>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <p class="mb-2">contacto@artemente.com</p>
+                    <p class="mb-4">+54 9 11 2345-6789</p>
+                    <div class="flex justify-center md:justify-end space-x-4">
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="material-icons">facebook</i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="material-icons">alternate_email</i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="material-icons">photo_camera</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sticky header
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('sticky-header');
+            if (window.scrollY > 100) {
+                header.classList.add('sticky');
+                document.body.style.paddingTop = header.offsetHeight + 'px';
+            } else {
+                header.classList.remove('sticky');
+                document.body.style.paddingTop = '0';
+            }
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a[href^="#"]').forEach(a => {
+            a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.querySelector('input[placeholder="Nombre"]').value;
+            const modalidad = document.querySelector('input[name="modalidad"]:checked').value;
+
+            alert('Gracias por tu consulta, ' + name + '. Te contactaremos pronto con información sobre la modalidad ' + modalidad + '.');
+            this.reset();
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
