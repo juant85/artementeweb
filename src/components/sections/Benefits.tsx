@@ -23,7 +23,7 @@ export default function Benefits() {
                     Qué ganás con Artemente
                 </SectionTitle>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
                     {benefits.map((item, i) => (
                         <FadeIn delay={i * 0.05} key={i} className="flex flex-col items-center text-center p-5 rounded-2xl bg-white border-2 border-slate-100 hover:border-blue-400 hover:shadow-lg transition-all group">
                             <div className="w-14 h-14 md:w-20 md:h-20 bg-blue-50 rounded-2xl shadow-sm flex items-center justify-center text-blue-600 mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
